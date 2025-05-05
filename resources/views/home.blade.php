@@ -78,7 +78,7 @@
                                     <i class='bx bx-transfer-alt bx-tada-hover'></i>
                                 </div>
                                 <h5 class="card-title">Lalu Lintas Angkutan Udara</h5>
-                                <div class="card-count">87,325</div>
+                                <div class="card-count">{{ $totalAngkutanUdara }}</div>
                                 <div class="card-text-container">
                                     <p class="card-text text-muted">Total pergerakan pesawat hari ini</p>
                                 </div>

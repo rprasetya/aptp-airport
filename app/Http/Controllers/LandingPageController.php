@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Slider;
 use App\Models\News;
 use App\Models\Finance;
@@ -22,7 +23,7 @@ class LandingPageController extends Controller
     {
         $this->airportApi = $airportApi;
     }
-    public function home(Request $request)
+    public function home(Request $request, AirportApiService $airportApi)
     {
         $ip = $request->ip(); // IP Address pengunjung
         $userAgent = $request->header('User-Agent'); // Informasi browser/device
@@ -32,11 +33,15 @@ class LandingPageController extends Controller
             'ip_address' => $request->ip(),
             'user_agent' => $request->header('User-Agent'),
         ]);        
+        // Panggil API
+        $keberangkatan = $airportApi->getKeberangkatan();
+        $kedatangan = $airportApi->getKedatangan();
+        $totalAngkutanUdara = AirFreightTraffic::sum(DB::raw('arrival + departure'));
 
         $jumlahKeberangkatan = isset($keberangkatan['data']['result']['data']) ? count($keberangkatan['data']['result']['data']) : 0;
         $jumlahKedatangan = isset($kedatangan['data']['result']['data']) ? count($kedatangan['data']['result']['data']) : 0;
 
-        return view('home', compact('sliders', 'jumlahKeberangkatan', 'jumlahKedatangan'));
+        return view('home', compact('sliders', 'jumlahKeberangkatan', 'jumlahKedatangan','totalAngkutanUdara'));
     }
 
     public function berita()
